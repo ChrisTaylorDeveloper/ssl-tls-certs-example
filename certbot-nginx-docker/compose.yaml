@@ -1,0 +1,24 @@
+services:
+  nginx:
+    build:
+      context: ./nginx
+    environment:
+      - DOMAIN=${DOMAIN}
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - certbot_www:/var/www/certbot
+      - certbot_conf:/etc/letsencrypt
+
+  certbot:
+    image: certbot/certbot
+    volumes:
+      - certbot_www:/var/www/certbot
+      - certbot_conf:/etc/letsencrypt
+
+volumes:
+  certbot_www:
+    name: certbot_www
+  certbot_conf:
+    name: certbot_conf
