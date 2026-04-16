@@ -2,13 +2,14 @@
 
 ## Notes
 
-- This repo is an attempt at a Docker implementation of this article https://www.digitalocean.com/community/tutorials/how-to-set-up-and-configure-a-certificate-authority-on-ubuntu-22-04
+- This repo is an attempt at a Docker implementation of this article <https://www.digitalocean.com/community/tutorials/how-to-set-up-and-configure-a-certificate-authority-on-ubuntu-22-04>
 - You may need to run the commands below, out of order.
 - Seemingly, easy-rsa (from OpenVPN) is a wrapper around openssl.
 
 ## Certificate Signing Requests
 
-Place your certificate signing requests in directory `sign-requests`. Run the following command to inspect the subject of a certificate signing request
+Place your certificate signing requests in directory `sign-requests`. Run the
+following command to inspect the subject of a certificate signing request
 
 ```bash
 openssl req -in example.csr -noout -subject
@@ -25,7 +26,8 @@ docker run --name ca_service --rm -v ${PWD}/sign-requests:/tmp/ca-service/sign-r
 
 ## easyrsa tools
 
-This command _recreates_ the directory of easyrsa tools. You won't need to run this unless something has gone wrong and you want to start again.
+This command _recreates_ the directory of easyrsa tools. You won't need to run
+this unless something has gone wrong and you want to start again.
 
 ```bash
 rm -rf /tmp/ca-service/easy-rsa/* && ln -s /usr/share/easy-rsa/* /tmp/ca-service/easy-rsa/
@@ -52,10 +54,10 @@ cp /tmp/ca-service/vars /tmp/ca-service/easy-rsa/
 yes | ./easyrsa build-ca nopass
 ```
 
-
 ## Import request
 
-Import a request to easyrsa. Choose a handy shortname (which does not need to match the CN)
+Import a request to easyrsa. Choose a handy shortname (which does not need to
+match the CN)
 
 ```bash
 ./easyrsa import-req ../sign-requests/foo.csr short_name
@@ -86,4 +88,4 @@ docker cp ca_service:/tmp/ca-service/easy-rsa/pki/ca.crt ~/Desktop/ca_service
 
 ## Add to Chrome
 
-Try [chrome://certificate-manager/localcerts/usercerts](chrome://certificate-manager/localcerts/usercerts) and add your CA cert as a trusted certificate.
+Try [chrome://certificate-manager/localcerts/usercerts](chrome://certificate-manager/localcerts/usercerts) and add your CA cert asa trusted certificate.
