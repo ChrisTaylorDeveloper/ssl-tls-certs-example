@@ -36,3 +36,6 @@ openssl req -new -newkey rsa:2048 -nodes \
   -addext "subjectAltName = DNS:example.com, DNS:*.example.com" \
   -keyout server.key \
   -out server.csr
+
+# INSPECT THE CERT SIGNING REQUEST
+openssl req -noout -text -in server.csr
