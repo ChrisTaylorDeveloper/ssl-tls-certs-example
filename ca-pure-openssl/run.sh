@@ -2,14 +2,14 @@
 
 set -e
 
-# CLEAN UP FROM PREVIOUS RUN.
+# CLEAN UP FROM PREVIOUS RUN
 rm -rf workdir/ && mkdir workdir && cd workdir
 
 # GENERATE RSA PRIVATE KEY FOR THE CA
 # AES encrypted variant, requires pass-phrase.
 # openssl genrsa -aes256 \
 #   -out MyCA.key 4096
-# No pass-phrase required, key not encrypted.
+# Key not encrypted, no pass-phrase required.
 openssl genrsa \
   -out MyCA.key 2048
 
