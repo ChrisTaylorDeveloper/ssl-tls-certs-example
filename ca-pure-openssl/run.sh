@@ -33,6 +33,7 @@ openssl req -x509 -new -nodes -sha256 -days 1826 \
 # Browsers rely mostly  on SAN, not CN.
 # Note the base and wildcard domain in the subjectAltName extension.
 openssl req -new -newkey rsa:2048 -nodes \
+  `# these are the Subject Name attributes` \
   -subj "/C=US/ST=State/L=City/O=Organization/OU=OrgUnit/CN=example.com" \
   -addext "subjectAltName = DNS:example.com, DNS:*.example.com" \
   -keyout server.key \
