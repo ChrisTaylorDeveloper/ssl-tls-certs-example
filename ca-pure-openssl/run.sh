@@ -35,12 +35,12 @@ openssl req -new -newkey rsa:2048 -nodes \
   `# these are the Subject Name attributes` \
   -subj "/C=US/ST=State/L=City/O=Organization/OU=OrgUnit/CN=thedomain.com" \
   -addext "subjectAltName = DNS:thedomain.com, DNS:*.thedomain.com" \
-  -keyout server.key \
-  -out server.csr
+  -keyout thedomain.key \
+  -out thedomain.csr
 
 # 7. INSPECT THE CERT SIGNING REQUEST
 # Look for 'Subject Alternative Name'
-# openssl req -noout -text -in server.csr
+# openssl req -noout -text -in thedomain.csr
 
 # 8. CREATE AN EXTENSION FILE FOR THE SAN PROPERTIES
 cat >thedomain.ext <<EOF
@@ -56,7 +56,7 @@ EOF
 
 # 9. SIGN THE CSR WITH THE CA
 openssl x509 -req -sha256 -CAcreateserial -days 365 \
-  -in server.csr \
+  -in thedomain.csr \
   -CA MyCA.crt \
   -CAkey MyCA.key \
   -out thedomain.crt \
