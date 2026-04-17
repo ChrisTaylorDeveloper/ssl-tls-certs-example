@@ -19,7 +19,6 @@ openssl genrsa \
 
 # 4. CREATE A SELF-SIGNED ROOT CERT FOR THE CA
 # MyCA.crt is installed in a browser.
-# TODO: Could I use -out MyCA.pem instead?
 openssl req -x509 -new -nodes -sha256 -days 1826 \
   -subj '/C=US/ST=SomeState/L=City/O=MyOrg/OU=OrgUnit/CN=MyOrgRootCA' \
   -key MyCA.key \
