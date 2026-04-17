@@ -33,8 +33,8 @@ openssl req -x509 -new -nodes -sha256 -days 1826 \
 # Note base and wildcard domain in subjectAltName extension.
 openssl req -new -newkey rsa:2048 -nodes \
   `# these are the Subject Name attributes` \
-  -subj "/C=US/ST=State/L=City/O=Organization/OU=OrgUnit/CN=example.com" \
-  -addext "subjectAltName = DNS:example.com, DNS:*.example.com" \
+  -subj "/C=US/ST=State/L=City/O=Organization/OU=OrgUnit/CN=thedomain.com" \
+  -addext "subjectAltName = DNS:thedomain.com, DNS:*.thedomain.com" \
   -keyout server.key \
   -out server.csr
 
@@ -43,15 +43,15 @@ openssl req -new -newkey rsa:2048 -nodes \
 # openssl req -noout -text -in server.csr
 
 # 8. CREATE AN EXTENSION FILE FOR THE SAN PROPERTIES
-cat >example.ext <<EOF
+cat >thedomain.ext <<EOF
 authorityKeyIdentifier=keyid,issuer
 basicConstraints=CA:FALSE
 keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
 subjectAltName = @alt_names
 
 [alt_names]
-DNS.1 = example.com
-DNS.2 = *.example.com
+DNS.1 = thedomain.com
+DNS.2 = *.thedomain.com
 EOF
 
 # 9. SIGN THE CSR WITH THE CA
@@ -59,8 +59,8 @@ openssl x509 -req -sha256 -CAcreateserial -days 365 \
   -in server.csr \
   -CA MyCA.crt \
   -CAkey MyCA.key \
-  -out example.crt \
-  -extfile example.ext
+  -out thedomain.crt \
+  -extfile thedomain.ext
 
 # 10. INSPECT THE SIGNED CERT
-# openssl x509 -in example.crt -text -noout
+# openssl x509 -in thedomain.crt -text -noout
