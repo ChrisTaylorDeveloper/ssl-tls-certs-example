@@ -30,7 +30,7 @@ openssl req -x509 -new -nodes -sha256 -days 1826 \
 
 # 6. GENERATE NEW PRIVATE KEY AND A CSR FOR IT.
 # Browsers rely mostly  on SAN, not CN.
-# Note the base and wildcard domain in the subjectAltName extension.
+# Note base and wildcard domain in subjectAltName extension.
 openssl req -new -newkey rsa:2048 -nodes \
   `# these are the Subject Name attributes` \
   -subj "/C=US/ST=State/L=City/O=Organization/OU=OrgUnit/CN=example.com" \
