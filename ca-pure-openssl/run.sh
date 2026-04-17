@@ -40,7 +40,8 @@ openssl req -new -newkey rsa:2048 -nodes \
 
 # 7. INSPECT THE CERT SIGNING REQUEST
 # Look for 'Subject Alternative Name'
-# openssl req -noout -text -in thedomain.csr
+# openssl req -noout -text \
+#   -in thedomain.csr
 
 # 8. CREATE AN EXTENSION FILE FOR THE SAN PROPERTIES
 cat >thedomain.ext <<EOF
@@ -63,4 +64,5 @@ openssl x509 -req -sha256 -CAcreateserial -days 365 \
   -extfile thedomain.ext
 
 # 10. INSPECT THE SIGNED CERT
-# openssl x509 -in thedomain.crt -text -noout
+openssl x509 -text -noout \
+  -in thedomain.crt
