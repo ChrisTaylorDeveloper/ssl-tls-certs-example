@@ -20,7 +20,7 @@ openssl genrsa \
 # 4. CREATE A SELF-SIGNED ROOT CERT FOR THE CA
 # MyCA.crt is installed in a browser.
 openssl req -x509 -new -nodes -sha256 -days 1826 \
-  -subj '/C=US/ST=SomeState/L=City/O=MyOrg/OU=OrgUnit/CN=MyOrgRootCA' \
+  -subj '/C=US/ST=NewYork/L=NewYork/O=Org/OU=OrgUnit/CN=MyCA' \
   -key MyCA.key \
   -out MyCA.crt
 
@@ -33,7 +33,7 @@ openssl req -x509 -new -nodes -sha256 -days 1826 \
 # Note base and wildcard domain in subjectAltName extension.
 openssl req -new -newkey rsa:2048 -nodes \
   `# these are the Subject Name attributes` \
-  -subj "/C=US/ST=State/L=City/O=Organization/OU=OrgUnit/CN=thedomain.com" \
+  -subj "/C=US/ST=State/L=City/O=Organisation/OU=OrgUnit/CN=thedomain.com" \
   -addext "subjectAltName = DNS:thedomain.com, DNS:*.thedomain.com" \
   -keyout thedomain.key \
   -out thedomain.csr
