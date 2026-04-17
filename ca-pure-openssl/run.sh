@@ -32,9 +32,8 @@ openssl req -x509 -new -nodes -sha256 -days 1826 \
 # 6. GENERATE NEW PRIVATE KEY AND A CSR FOR IT.
 # Browsers rely mostly  on SAN, not CN.
 # Note the base and wildcard domain in the subjectAltName extension.
-# TODO: Add in OU also?
 openssl req -new -newkey rsa:2048 -nodes \
-  -subj "/C=US/ST=State/L=City/O=Organization/CN=example.com" \
+  -subj "/C=US/ST=State/L=City/O=Organization/OU=OrgUnit/CN=example.com" \
   -addext "subjectAltName = DNS:example.com, DNS:*.example.com" \
   -keyout server.key \
   -out server.csr
@@ -54,3 +53,11 @@ subjectAltName = @alt_names
 DNS.1 = example.com
 DNS.2 = *.example.com
 EOF
+
+# 9. SIGN THE CSR WITH THE CA
+openssl x509 -req -sha256 -CAcreateserial -days 365 \
+  -in server.csr \
+  -CA MyCA.crt \
+  -CAkey MyCA.key \
+  -out example.crt \
+  -extfile example.ext
