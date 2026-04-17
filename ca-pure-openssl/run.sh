@@ -7,11 +7,11 @@ rm -rf workdir/ && mkdir workdir && cd workdir
 
 # GENERATE RSA PRIVATE KEY FOR THE CA
 # AES encrypted variant, requires pass-phrase.
-# openssl genrsa -aes256 \
-#   -out MyCA.key 4096
+openssl genrsa -aes256 \
+  -out MyCA.key 4096
 # Key not encrypted, no pass-phrase required.
-openssl genrsa \
-  -out MyCA.key 2048
+# openssl genrsa \
+#   -out MyCA.key 2048
 
 # INSPECT THE CA PRIVATE KEY
 # openssl rsa -noout -text \
@@ -26,7 +26,8 @@ openssl req -x509 -new -nodes -sha256 -days 1826 \
   -out MyCA.crt
 
 # INSPECT THE ROOT CERT OF THE CA
-# openssl x509 -in MyCA.crt -noout -text
+# openssl x509 -noout -text \
+#   -in MyCA.crt
 
 # GENERATES A NEW RSA PRIVATE KEY AND A CSR IN ONE GO.
 # Adds the subjectAltName extension so both base domain and wildcard is covered
