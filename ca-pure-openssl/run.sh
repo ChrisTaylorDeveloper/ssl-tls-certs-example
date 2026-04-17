@@ -31,8 +31,8 @@ openssl req -x509 -new -nodes -sha256 -days 1826 \
 # Adds the subjectAltName extension so both base domain and wildcard is covered
 # Modern browsers rely almost exclusively on the SAN field, not CN.
 # # TODO: Add in OU also?
-# openssl req -new -newkey rsa:2048 -nodes \
-#   -subj "/C=US/ST=State/L=City/O=Organization/CN=example.com" \
-#   -addext "subjectAltName = DNS:example.com, DNS:*.example.com" \
-#   -keyout server.key \
-#   -out server.csr
+openssl req -new -newkey rsa:2048 -nodes \
+  -subj "/C=US/ST=State/L=City/O=Organization/CN=example.com" \
+  -addext "subjectAltName = DNS:example.com, DNS:*.example.com" \
+  -keyout server.key \
+  -out server.csr
