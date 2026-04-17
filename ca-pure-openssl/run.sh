@@ -24,7 +24,7 @@ openssl req -x509 -new -nodes -sha256 -days 1826 \
   -key MyCA.key \
   -out MyCA.crt
 
-# INSPECT THE CERTIFICATE FOR THE CA
+# INSPECT THE ROOT CERT OF THE CA
 # openssl x509 -in MyCA.crt -noout -text
 
 # GENERATES A NEW RSA PRIVATE KEY AND A CSR IN ONE GO.
