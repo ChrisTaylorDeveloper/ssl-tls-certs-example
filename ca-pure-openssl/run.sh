@@ -30,9 +30,9 @@ openssl req -x509 -new -nodes -sha256 -days 1826 \
 #   -in MyCA.crt
 
 # GENERATE NEW PRIVATE KEY AND A CSR FOR IT.
-# Modern browsers rely almost exclusively on SAN field, not CN.
+# Browsers rely mostly  on SAN, not CN.
 # Note the base and wildcard domain in the subjectAltName extension.
-# # TODO: Add in OU also?
+# TODO: Add in OU also?
 openssl req -new -newkey rsa:2048 -nodes \
   -subj "/C=US/ST=State/L=City/O=Organization/CN=example.com" \
   -addext "subjectAltName = DNS:example.com, DNS:*.example.com" \
@@ -40,4 +40,5 @@ openssl req -new -newkey rsa:2048 -nodes \
   -out server.csr
 
 # INSPECT THE CERT SIGNING REQUEST
-# openssl req -noout -text -in server.csr
+# Look for 'Subject Alternative Name'
+openssl req -noout -text -in server.csr
