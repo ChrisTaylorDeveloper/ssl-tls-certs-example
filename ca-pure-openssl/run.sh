@@ -63,4 +63,4 @@ openssl x509 -req -sha256 -CAcreateserial -days 365 \
   -extfile example.ext
 
 # 10. INSPECT THE SIGNED CERT
-openssl x509 -in example.crt -text -noout
+# openssl x509 -in example.crt -text -noout
