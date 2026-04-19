@@ -3,7 +3,8 @@
 set -e
 
 # 1. CLEAN UP FROM PREVIOUS RUN
-rm -rf workdir/ && mkdir workdir && cd workdir
+docker compose down
+rm -rf certs-keys/ && mkdir certs-keys && cd certs-keys
 
 DOMAIN=foobar.cloud
 CA="Dev-CA-Signed-$DOMAIN"
@@ -73,3 +74,5 @@ openssl x509 -req -sha256 -CAcreateserial -days 365 \
 
 # 10. VERITY OUR CA DID IN FACT ISSUE OUR CERTIFICATE
 # openssl verify -CAfile "$CA".crt "$DOMAIN".crt
+
+docker compose up --build -d
