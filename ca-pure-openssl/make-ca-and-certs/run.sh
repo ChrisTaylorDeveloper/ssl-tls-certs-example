@@ -36,8 +36,8 @@ openssl req -x509 -new -nodes -sha256 -days 1826 \
 # Note base and wildcard domain in subjectAltName extension.
 openssl req -new -newkey rsa:2048 -nodes \
   `# these are the Subject Name attributes` \
-  -subj "/C=US/ST=State/L=City/O=Organisation/OU=OrgUnit/CN=$DOMAIN.com" \
-  -addext "subjectAltName = DNS:$DOMAIN.com, DNS:*.$DOMAIN.com" \
+  -subj "/C=US/ST=State/L=City/O=Organisation/OU=OrgUnit/CN=$DOMAIN" \
+  -addext "subjectAltName = DNS:$DOMAIN, DNS:*.$DOMAIN" \
   -keyout "$DOMAIN".key \
   -out "$DOMAIN".csr
 
@@ -55,8 +55,8 @@ keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
 subjectAltName = @alt_names
 
 [alt_names]
-DNS.1 = "$DOMAIN".com
-DNS.2 = *."$DOMAIN".com
+DNS.1 = "$DOMAIN"
+DNS.2 = *."$DOMAIN"
 EOF
 
 # 9. THE CA SIGNS THE CSR
@@ -68,8 +68,8 @@ openssl x509 -req -sha256 -CAcreateserial -days 365 \
   -extfile "$DOMAIN".ext
 
 # 10. INSPECT THE SIGNED CERT
-# openssl x509 -text -noout \
-#   -in "$DOMAIN".crt
+openssl x509 -text -noout \
+  -in "$DOMAIN".crt
 
 # 10. VERITY OUR CA DID IN FACT ISSUE OUR CERTIFICATE
 openssl verify -CAfile "$CA".crt "$DOMAIN".crt
