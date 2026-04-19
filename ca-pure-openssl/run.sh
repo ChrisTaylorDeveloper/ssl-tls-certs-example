@@ -9,6 +9,9 @@ rm -rf certs-keys/ && mkdir certs-keys && cd certs-keys
 DOMAIN=foobar.cloud
 CA="Dev-CA-Signed-$DOMAIN"
 
+sed -i "s/server_name/$DOMAIN/g" ../vhost.conf
+sed -i "s/server_alias/*.$DOMAIN/g" ../vhost.conf
+
 # 2. GENERATE RSA PRIVATE KEY FOR THE CA
 # AES encrypted variant, requires pass-phrase.
 # openssl genrsa -aes256 \
