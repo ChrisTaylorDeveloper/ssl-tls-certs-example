@@ -28,42 +28,44 @@ openssl req -x509 -new -nodes -sha256 -days 1826 \
 # openssl x509 -noout -text \
 #   -in MyCA.crt
 
+DOMAIN=changeme
+
 # 6. GENERATE NEW PRIVATE KEY AND A CSR FOR IT.
 # Browsers rely mostly on SAN, not CN.
 # Note base and wildcard domain in subjectAltName extension.
 openssl req -new -newkey rsa:2048 -nodes \
   `# these are the Subject Name attributes` \
-  -subj "/C=US/ST=State/L=City/O=Organisation/OU=OrgUnit/CN=thedomain.com" \
-  -addext "subjectAltName = DNS:thedomain.com, DNS:*.thedomain.com" \
-  -keyout thedomain.key \
-  -out thedomain.csr
+  -subj "/C=US/ST=State/L=City/O=Organisation/OU=OrgUnit/CN=$DOMAIN.com" \
+  -addext "subjectAltName = DNS:$DOMAIN.com, DNS:*.$DOMAIN.com" \
+  -keyout "$DOMAIN".key \
+  -out "$DOMAIN".csr
 
 # 7. INSPECT THE CERT SIGNING REQUEST
 # Look for 'Subject Alternative Name'
 # openssl req -noout -text \
-#   -in thedomain.csr
+#   -in "$DOMAIN".csr
 
 # 8. CREATE AN EXTENSION FILE FOR SUBJECT ALTERNATIVE NAME PROPS
 # Required in next step.
-cat >thedomain.ext <<EOF
+cat >"$DOMAIN".ext <<EOF
 authorityKeyIdentifier=keyid,issuer
 basicConstraints=CA:FALSE
 keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
 subjectAltName = @alt_names
 
 [alt_names]
-DNS.1 = thedomain.com
-DNS.2 = *.thedomain.com
+DNS.1 = "$DOMAIN".com
+DNS.2 = *."$DOMAIN".com
 EOF
 
 # 9. THE CA SIGNS THE CSR
 openssl x509 -req -sha256 -CAcreateserial -days 365 \
-  -in thedomain.csr \
+  -in "$DOMAIN".csr \
   -CA MyCA.crt \
   -CAkey MyCA.key \
-  -out thedomain.crt \
-  -extfile thedomain.ext
+  -out "$DOMAIN".crt \
+  -extfile "$DOMAIN".ext
 
 # 10. INSPECT THE SIGNED CERT
 openssl x509 -text -noout \
-  -in thedomain.crt
+  -in "$DOMAIN".crt
