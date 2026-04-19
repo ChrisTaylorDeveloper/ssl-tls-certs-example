@@ -5,30 +5,31 @@ set -e
 # 1. CLEAN UP FROM PREVIOUS RUN
 rm -rf workdir/ && mkdir workdir && cd workdir
 
+DOMAIN=changeme
+CA=CA"$DOMAIN"
+
 # 2. GENERATE RSA PRIVATE KEY FOR THE CA
 # AES encrypted variant, requires pass-phrase.
 # openssl genrsa -aes256 \
-#   -out MyCA.key 4096
+#   -out "$CA".key 4096
 # Key not encrypted, no pass-phrase required.
 openssl genrsa \
-  -out MyCA.key 2048
+  -out "$CA".key 2048
 
 # 3. INSPECT THE CA PRIVATE KEY
 # openssl rsa -noout -text \
-#   -in MyCA.key
+#   -in "$CA".key
 
 # 4. CREATE A SELF-SIGNED ROOT CERT FOR THE CA
-# MyCA.crt is installed in a browser.
+# "$CA".crt is installed in a browser.
 openssl req -x509 -new -nodes -sha256 -days 1826 \
-  -subj '/C=US/ST=NewYork/L=NewYork/O=Org/OU=OrgUnit/CN=MyCA' \
-  -key MyCA.key \
-  -out MyCA.crt
+  -subj "/C=US/ST=NewYork/L=NewYork/O=Org/OU=OrgUnit/CN=$CA" \
+  -key "$CA".key \
+  -out "$CA".crt
 
 # 5. INSPECT THE ROOT CERT OF THE CA
 # openssl x509 -noout -text \
-#   -in MyCA.crt
-
-DOMAIN=changeme
+#   -in "$CA".crt
 
 # 6. GENERATE NEW PRIVATE KEY AND A CSR FOR IT.
 # Browsers rely mostly on SAN, not CN.
@@ -61,8 +62,8 @@ EOF
 # 9. THE CA SIGNS THE CSR
 openssl x509 -req -sha256 -CAcreateserial -days 365 \
   -in "$DOMAIN".csr \
-  -CA MyCA.crt \
-  -CAkey MyCA.key \
+  -CA "$CA".crt \
+  -CAkey "$CA".key \
   -out "$DOMAIN".crt \
   -extfile "$DOMAIN".ext
 
