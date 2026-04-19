@@ -6,7 +6,7 @@ set -e
 rm -rf workdir/ && mkdir workdir && cd workdir
 
 DOMAIN=foobar.cloud
-CA="DevCAFor-$DOMAIN"
+CA="Dev-CA-Signed-$DOMAIN"
 
 # 2. GENERATE RSA PRIVATE KEY FOR THE CA
 # AES encrypted variant, requires pass-phrase.
@@ -36,7 +36,7 @@ openssl req -x509 -new -nodes -sha256 -days 1826 \
 # Note base and wildcard domain in subjectAltName extension.
 openssl req -new -newkey rsa:2048 -nodes \
   `# these are the Subject Name attributes` \
-  -subj "/C=US/ST=State/L=City/O=Organisation/OU=OrgUnit/CN=$DOMAIN" \
+  -subj "/C=UK/ST=Channel Islands/L=Jersey/O=Chris Taylor Developer/OU=IT Department/CN=$DOMAIN" \
   -addext "subjectAltName = DNS:$DOMAIN, DNS:*.$DOMAIN" \
   -keyout "$DOMAIN".key \
   -out "$DOMAIN".csr
