@@ -1,1 +1,2 @@
-workdir/
+certs-keys/
+.env

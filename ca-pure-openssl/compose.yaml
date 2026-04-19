@@ -1,0 +1,7 @@
+services:
+  web:
+    build:
+      args:
+        DOMAIN: ${DOMAIN}
+    ports:
+      - 443:443
