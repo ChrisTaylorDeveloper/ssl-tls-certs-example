@@ -5,8 +5,8 @@ set -e
 # 1. CLEAN UP FROM PREVIOUS RUN
 rm -rf workdir/ && mkdir workdir && cd workdir
 
-DOMAIN=changeme
-CA=CA"$DOMAIN"
+DOMAIN=foobar.cloud
+CA=CA-"$DOMAIN"
 
 # 2. GENERATE RSA PRIVATE KEY FOR THE CA
 # AES encrypted variant, requires pass-phrase.
