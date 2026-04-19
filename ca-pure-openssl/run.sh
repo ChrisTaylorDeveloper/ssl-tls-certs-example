@@ -2,12 +2,12 @@
 
 set -e
 
+source .env
+CA="CA-for-$DOMAIN"
+
 # 1. CLEAN UP FROM PREVIOUS RUN
 docker compose down
 rm -rf certs-keys/ && mkdir certs-keys && cd certs-keys
-
-DOMAIN=foobar.cloud
-CA="Dev-CA-Signed-$DOMAIN"
 
 # 2. GENERATE RSA PRIVATE KEY FOR THE CA
 # AES encrypted variant, requires pass-phrase.
@@ -39,8 +39,8 @@ openssl req -new -newkey rsa:2048 -nodes \
   `# these are the Subject Name attributes` \
   -subj "/C=UK/ST=Channel Islands/L=Jersey/O=Chris Taylor Developer/OU=IT Department/CN=$DOMAIN" \
   -addext "subjectAltName = DNS:$DOMAIN, DNS:*.$DOMAIN" \
-  -keyout "$DOMAIN".key \
-  -out "$DOMAIN".csr
+  -keyout the-domain.key \
+  -out the-domain.csr
 
 # 7. INSPECT THE CERT SIGNING REQUEST
 # Look for 'Subject Alternative Name'
@@ -49,7 +49,7 @@ openssl req -new -newkey rsa:2048 -nodes \
 
 # 8. CREATE AN EXTENSION FILE FOR SUBJECT ALTERNATIVE NAME PROPS
 # Required in next step.
-cat >"$DOMAIN".ext <<EOF
+cat >the-domain.ext <<EOF
 authorityKeyIdentifier=keyid,issuer
 basicConstraints=CA:FALSE
 keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipherment
@@ -62,11 +62,11 @@ EOF
 
 # 9. THE CA SIGNS THE CSR
 openssl x509 -req -sha256 -CAcreateserial -days 365 \
-  -in "$DOMAIN".csr \
+  -in the-domain.csr \
   -CA "$CA".crt \
   -CAkey "$CA".key \
-  -out "$DOMAIN".crt \
-  -extfile "$DOMAIN".ext
+  -out the-domain.crt \
+  -extfile the-domain.ext
 
 # 10. INSPECT THE SIGNED CERT
 # openssl x509 -text -noout \
