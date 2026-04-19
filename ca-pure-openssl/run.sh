@@ -29,7 +29,7 @@ openssl req -x509 -new -nodes -sha256 -days 1826 \
 #   -in MyCA.crt
 
 # 6. GENERATE NEW PRIVATE KEY AND A CSR FOR IT.
-# Browsers rely mostly  on SAN, not CN.
+# Browsers rely mostly on SAN, not CN.
 # Note base and wildcard domain in subjectAltName extension.
 openssl req -new -newkey rsa:2048 -nodes \
   `# these are the Subject Name attributes` \
@@ -43,7 +43,8 @@ openssl req -new -newkey rsa:2048 -nodes \
 # openssl req -noout -text \
 #   -in thedomain.csr
 
-# 8. CREATE AN EXTENSION FILE FOR THE SAN PROPERTIES
+# 8. CREATE AN EXTENSION FILE FOR SUBJECT ALTERNATIVE NAME PROPS
+# Required in next step.
 cat >thedomain.ext <<EOF
 authorityKeyIdentifier=keyid,issuer
 basicConstraints=CA:FALSE
@@ -55,7 +56,7 @@ DNS.1 = thedomain.com
 DNS.2 = *.thedomain.com
 EOF
 
-# 9. SIGN THE CSR WITH THE CA
+# 9. THE CA SIGNS THE CSR
 openssl x509 -req -sha256 -CAcreateserial -days 365 \
   -in thedomain.csr \
   -CA MyCA.crt \
