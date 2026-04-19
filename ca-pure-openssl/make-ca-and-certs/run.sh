@@ -6,7 +6,7 @@ set -e
 rm -rf workdir/ && mkdir workdir && cd workdir
 
 DOMAIN=foobar.cloud
-CA=CA-"$DOMAIN"
+CA="Dev CA for $DOMAIN"
 
 # 2. GENERATE RSA PRIVATE KEY FOR THE CA
 # AES encrypted variant, requires pass-phrase.
@@ -23,7 +23,7 @@ openssl genrsa \
 # 4. CREATE A SELF-SIGNED ROOT CERT FOR THE CA
 # "$CA".crt is installed in a browser.
 openssl req -x509 -new -nodes -sha256 -days 1826 \
-  -subj "/C=US/ST=NewYork/L=NewYork/O=Org/OU=OrgUnit/CN=$CA" \
+  -subj "/C=UK/ST=Channel Islands/L=Guernsey/O=Chris Taylor Developer/OU=Engineering Department/CN=$CA" \
   -key "$CA".key \
   -out "$CA".crt
 
