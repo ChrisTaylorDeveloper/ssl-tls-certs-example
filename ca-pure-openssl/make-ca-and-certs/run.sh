@@ -6,7 +6,7 @@ set -e
 rm -rf workdir/ && mkdir workdir && cd workdir
 
 DOMAIN=foobar.cloud
-CA="Dev CA for $DOMAIN"
+CA="DevCAFor-$DOMAIN"
 
 # 2. GENERATE RSA PRIVATE KEY FOR THE CA
 # AES encrypted variant, requires pass-phrase.
@@ -70,3 +70,6 @@ openssl x509 -req -sha256 -CAcreateserial -days 365 \
 # 10. INSPECT THE SIGNED CERT
 # openssl x509 -text -noout \
 #   -in "$DOMAIN".crt
+
+# 10. VERITY OUR CA DID IN FACT ISSUE OUR CERTIFICATE
+openssl verify -CAfile "$CA".crt "$DOMAIN".crt
