@@ -9,17 +9,14 @@ CA="CA-for-$DOMAIN"
 docker compose down
 rm -rf certs-keys/ && mkdir certs-keys && cd certs-keys
 
-# 2. GENERATE RSA PRIVATE KEY FOR THE CA
-# AES encrypted variant, requires pass-phrase.
-# openssl genrsa -aes256 \
-#   -out "$CA".key 4096
-# Key not encrypted, no pass-phrase required.
-openssl genrsa \
-  -out "$CA".key 2048
+# 2. GENERATE RSA PRIVATE KEY, FOR THE CA
+# The AES encrypted variant, requires pass-phrase.
+# openssl genrsa -aes256 -out "$CA".key 4096
+# RSA key not encrypted, no pass-phrase required.
+openssl genrsa -out "$CA".key 2048
 
 # 3. INSPECT THE CA PRIVATE KEY
-# openssl rsa -noout -text \
-#   -in "$CA".key
+# openssl rsa -noout -text -in "$CA".key
 
 # 4. CREATE A SELF-SIGNED ROOT CERT FOR THE CA
 # "$CA".crt is installed in a browser.
@@ -29,8 +26,7 @@ openssl req -x509 -new -nodes -sha256 -days 1826 \
   -out "$CA".crt
 
 # 5. INSPECT THE ROOT CERT OF THE CA
-# openssl x509 -noout -text \
-#   -in "$CA".crt
+# openssl x509 -noout -text -in "$CA".crt
 
 # 6. GENERATE NEW PRIVATE KEY AND A CSR FOR IT.
 # Browsers rely mostly on SAN, not CN.
@@ -44,8 +40,7 @@ openssl req -new -newkey rsa:2048 -nodes \
 
 # 7. INSPECT THE CERT SIGNING REQUEST
 # Look for 'Subject Alternative Name'
-# openssl req -noout -text \
-#   -in "$DOMAIN".csr
+# openssl req -noout -text -in "$DOMAIN".csr
 
 # 8. CREATE AN EXTENSION FILE FOR SUBJECT ALTERNATIVE NAME PROPS
 # Required in next step.
@@ -69,8 +64,7 @@ openssl x509 -req -sha256 -CAcreateserial -days 365 \
   -extfile the-domain.ext
 
 # 10. INSPECT THE SIGNED CERT
-# openssl x509 -text -noout \
-#   -in "$DOMAIN".crt
+# openssl x509 -text -noout -in "$DOMAIN".crt
 
 # 10. VERITY OUR CA DID IN FACT ISSUE OUR CERTIFICATE
 # openssl verify -CAfile "$CA".crt "$DOMAIN".crt
